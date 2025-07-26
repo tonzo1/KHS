@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Member Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Member Dashboard</h1>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total Members</h5>
+                    <h2 class="card-text">{{ total_members }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">New This Month</h5>
+                    <h2 class="card-text">{{ new_this_month }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Current Year</h5>
+                    <h2 class="card-text">{{ current_year }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Members -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Recently Joined Members</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Join Date</th>
+                            <th>Membership</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in recent_members %}
+                        <tr>
+                            <td>{{ member.get_full_name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.date_joined|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge bg-{{ member.get_membership_badge_color }}">
+                                    {{ member.get_membership_type_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No members found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Membership Distribution -->
+    <div class="card">
+        <div class="card-header">
+            <h5>Membership Distribution</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for type, count in membership_stats.items %}
+                <div class="col-md-4 mb-3">
+                    <div class="progress" style="height: 30px;">
+                        <div class="progress-bar 
+                            {% if type == 'Regular' %}bg-secondary
+                            {% elif type == 'Premium' %}bg-primary
+                            {% else %}bg-success{% endif %}" 
+                            role="progressbar" 
+                            style="width: {% widthratio count total_members 100 %}%"
+                            aria-valuenow="{% widthratio count total_members 100 %}" 
+                            aria-valuemin="0" 
+                            aria-valuemax="100">
+                            {{ type }}: {{ count }} ({% widthratio count total_members 100 %}%)
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

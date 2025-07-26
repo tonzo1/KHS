@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Members List{% endblock %} {# Changed title for clarity #}
+
+{% block content %}
+<h1>Members List</h1>
+
+<form method="GET" action="{% url 'members:list' %}" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search members..." value="{{ request.GET.search }}">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Type</th>
+            <th>Status</th> {# Assuming 'status' is a field or method on your Member model #}
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.id }}</td>
+            <td>
+                {# Link to member detail page #}
+                <a href="{% url 'members:detail' member.id %}">{{ member.first_name }} {{ member.last_name }}</a>
+            </td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.phone }}</td>
+            <td>{{ member.get_membership_type_display }}</td> {# Use get_FOO_display for choices #}
+            <td>{% if member.is_active %}Active{% else %}Inactive{% endif %}</td> {# Example status #}
+            <td>
+                {# Correct Django URL tag usage: {% url 'namespace:url_name' arg1 arg2 ... %} #}
+                <a href="{% url 'members:update' member.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'members:delete' member.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete {{ member.first_name }} {{ member.last_name }}?')">Delete</a>
+            </td>
+        </tr>
+        {% empty %} {# Display message if no members #}
+        <tr>
+            <td colspan="8">No members found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# Add pagination links if you're using it (as indicated by paginate_by in ListView) #}
+{% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Previous</a></li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+                <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ i }}</a>
+                </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+
+
+{# Correct Django URL tag usage #}
+<a href="{% url 'members:create' %}" class="btn btn-success">Add New Member</a>
+{% endblock %}

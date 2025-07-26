@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}View Members{% endblock %}
+
+{% block content %}
+<h1>Members List</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.id }}</td>
+            <td>{{ member.first_name }} {{ member.last_name }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.phone }}</td>
+            <td>{{ member.membership_type }}</td>
+            <td>{{ member.status }}</td>
+            <td>
+                <a href="{{ url_for('edit_member', id=member.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ url_for('delete_member', id=member.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('add_member') }}" class="btn btn-success">Add New Member</a>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %} {# Assuming you have a base template for consistent layout #}
+{% load static %} {# Required if you use static files like CSS/JS #}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Login to Your Account</h4>
+                </div>
+                <div class="card-body">
+                    {# Display non-field errors (e.g., "username/password incorrect") #}
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            Please correct the errors below.
+                        </div>
+                    {% endif %}
+                    
+                    {# Specific message if redirected from a protected page #}
+                    {% if next %}
+                        {% if user.is_authenticated %}
+                            <div class="alert alert-warning" role="alert">
+                                Your account does not have access to the page you requested.
+                                Please log in with an account that has the necessary permissions.
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info" role="alert">
+                                Please log in to view this page.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <form method="post" action="{% url 'members:login' %}">
+                        {% csrf_token %} {# Django's security token - ESSENTIAL for all POST forms #}
+                        
+                        {# Display form fields using Django's form rendering #}
+                        {# Assuming 'username' for LoginView, which maps to 'email' in your CustomUser model #}
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">Email Address</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}<div class="text-danger">{{ form.username.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                            {{ form.password }}
+                            {% if form.password.errors %}<div class="text-danger">{{ form.password.errors }}</div>{% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        
+                        {# Hidden input to redirect back to the original page after login #}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+                    
+                    <hr>
+                    <p class="text-center">
+                        <a href="{% url 'password_reset' %}">Forgot password?</a>
+                    </p>
+                    {# Example: Link to a registration page if you implement one #}
+                    {# <p class="text-center">Don't have an account? <a href="{% url 'members:register' %}">Register here</a></p> #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

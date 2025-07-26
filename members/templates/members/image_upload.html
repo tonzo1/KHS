@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Upload Member Image</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="image_file" class="form-label">Select image to upload:</label>
+            <input type="file" class="form-control" id="image_file" name="image_file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload Image</button>
+    </form>
+
+    {% if uploaded_file_url %}
+    <div class="mt-4">
+        <p>File uploaded at: <a href="{{ uploaded_file_url }}" target="_blank">{{ uploaded_file_url }}</a></p>
+        {% if uploaded_file_url|lower|slice:'-4:' == '.jpg' or uploaded_file_url|lower|slice:'-5:' == '.jpeg' or uploaded_file_url|lower|slice:'-4:' == '.png' %}
+        <img src="{{ uploaded_file_url }}" alt="Uploaded image" class="img-fluid mt-2" style="max-height: 300px;">
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Import Members from CSV</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="submit-row">
+            <input type="submit" value="Import" class="default">
+            <a href="{% url 'admin:members_member_changelist' %}" class="button">Cancel</a>
+        </div>
+    </form>
+
+    <div class="help">
+        <h3>CSV Format Requirements:</h3>
+        <ul>
+            <li>Required columns: first_name, last_name, email</li>
+            <li>Optional column: membership_type (R=Regular, P=Premium, V=VIP)</li>
+            <li>First row should be headers</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

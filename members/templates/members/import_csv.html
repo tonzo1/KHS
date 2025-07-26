@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Import Members{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Import Members from CSV</h1>
+    <p class="lead">Upload a CSV file to add new members or update existing ones.</p>
+
+    {% if messages %}
+        <div class="messages mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-info text-white">
+            <h4>Upload CSV File</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="csv_file" class="form-label">Select CSV File:</label>
+                    <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".csv" required>
+                    <div class="form-text">
+                        The CSV file should have a header row. Expected columns (case-sensitive) might include:
+                        <code>email</code>, <code>first_name</code>, <code>last_name</code>, <code>phone</code>,
+                        <code>address</code>, <code>membership_type</code> (R, P, V), <code>is_active</code> (True/False).
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info">Import CSV</button>
+                <a href="{% url 'members:dashboard' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

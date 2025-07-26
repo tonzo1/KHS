@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ member.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <img src="{{ member.profile_picture.url|default:'/static/images/default-profile.png' }}" 
+                     class="rounded-circle mb-3" width="150" height="150">
+                <h3>{{ member.get_full_name }}</h3>
+                <p class="text-muted">{{ member.get_membership_type_display }} Member</p>
+                
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    <a href="{% url 'members:update' member.pk %}" class="btn btn-primary">
+                        Edit Profile
+                    </a>
+                    <a href="{% url 'members:delete' member.pk %}" class="btn btn-outline-danger">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Member Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Email:</div>
+                    <div class="col-sm-9">{{ member.email }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Phone:</div>
+                    <div class="col-sm-9">{{ member.phone|default:"-" }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Address:</div>
+                    <div class="col-sm-9">{{ member.address|default:"-"|linebreaks }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Member Since:</div>
+                    <div class="col-sm-9">{{ member.date_joined|date:"F j, Y" }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 fw-bold">Notes:</div>
+                    <div class="col-sm-9">{{ member.notes|default:"-"|linebreaks }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

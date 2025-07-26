@@ -1,0 +1,37 @@
+ 	('S', 'Single'),
+        ('D', 'Double'),
+        ('L', 'LifeTime'),
+        ('G', 'Gardener'),
+
+using the  Django framework would like to design a plant management system with a personal inventory function to keep track of my personal plant collection 
+
+
+Identification table : common name , scientific name , family , type, variant,  origin, growth habit, sun requirement, water needs, soil type, flowering season,  reproduction, height, description, spread, notes, images, common issues
+
+Maintenance table: last watered , last fertilized , last bloom , last fruit , notes 
+
+inventory table :inventory number, location code, reception date, description, initial acquired value 
+
+email = models.EmailField(unique=True, null=False, blank=False)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    membership_type = models.CharField(max_length=50, blank=True, null=True)
+    membership_expiry = models.DateField(blank=True, null=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    notes = models.TextField(blank=True, null=True)
+
+
+
+Some fields include common name, type, variant, scientific name, family, origin, growth habit, sun requirement, water needs, soil type, flowering season,  reproduction, height, description, spread, notes, images, common issues 
+
+
+but also to act as a resource of plants encountered  
+
+Some fields include common name, type, variant, scientific name, family, origin, growth habit, sun requirement, water needs, soil type, flowering season,  reproduction, height, description, spread, notes, images, common issues 
